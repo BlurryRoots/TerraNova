@@ -1,11 +1,27 @@
 cmake_minimum_required (VERSION 2.8)
 
-project (TerraNova)
+# project setup
+#
 
+project (TerraNova)
 set (app_name TerraNova)
 
-# includes cmake/FindSDL2.cmake
+# includes cmake extension scripts
 set (CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+
+# check for in-tree build attempt
+#
+if (${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
+	message (FATAL_ERROR
+		"Prevented in-tree built.\n"
+		"Please create a seperate build directory,\n"
+		"outsite of root directory and call:\n"
+		"cmake PATH_TO_TERRA_NOVA (e.g ../)"
+	)
+endif ()
+
+# build setup
+#
 
 # put the executable into the bin directory
 set (EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
