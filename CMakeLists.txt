@@ -30,21 +30,31 @@ set (ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 # find every source file
 file (GLOB_RECURSE source_files ${PROJECT_SOURCE_DIR}/src/*)
 
-# glew
-add_definitions (-DGLEW_STATIC)
-option (glew-cmake_BUILD_SHARED "" OFF)
-add_subdirectory (lib/glew)
-include_directories (lib/glew/include lib/glew/src)
-set (GLEW libglew_static)
 
 # system libraries
 set (SYSTEM_LIBS)
 list (APPEND SYSTEM_LIBS z)
 list (APPEND SYSTEM_LIBS pthread)
 
-#
-find_package (SDL2 REQUIRED)
-include_directories (${SDL2_INCLUDE_DIR})
+# library / modules
+add_subdirectory (lib)
+
+# sdl2
+include_directories (lib/sdl2/include build/sdl2/include)
+set (SDL2_LIBRARY SDL2-static)
+
+# glew
+include_directories (lib/glew/include lib/glew/src)
+set (GLEW libglew_static)
+
+## sdl2
+#find_package (SDL2 REQUIRED)
+#message (STATUS
+#	"Found SDL2 on system:\n"
+#	"inc: ${SDL2_INCLUDE_DIR}\n"
+#	"lib: ${SDL2_LIBRARY}"
+#)
+#include_directories (${SDL2_INCLUDE_DIR})
 
 # c++11 activation
 list (APPEND CMAKE_CXX_FLAGS "-std=c++11")
@@ -54,6 +64,7 @@ add_definitions (-Wall)
 # main target
 add_executable (${app_name} ${source_files})
 target_link_libraries (${app_name} ${SDL2_LIBRARY} ${GLEW} ${SYSTEM_LIBS})
+#target_link_libraries (${app_name} ${SDL2_LIBRARY} ${GLEW})
 
 
 # command to copy resources when using default target
