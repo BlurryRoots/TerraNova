@@ -40,21 +40,21 @@ list (APPEND SYSTEM_LIBS pthread)
 add_subdirectory (lib)
 
 # sdl2
-include_directories (lib/sdl2/include build/sdl2/include)
-set (SDL2_LIBRARY SDL2-static)
+#include_directories (lib/sdl2/include build/sdl2/include)
+#set (SDL2_LIBRARY SDL2-static)
 
 # glew
 include_directories (lib/glew/include lib/glew/src)
 set (GLEW libglew_static)
 
 ## sdl2
-#find_package (SDL2 REQUIRED)
-#message (STATUS
-#	"Found SDL2 on system:\n"
-#	"inc: ${SDL2_INCLUDE_DIR}\n"
-#	"lib: ${SDL2_LIBRARY}"
-#)
-#include_directories (${SDL2_INCLUDE_DIR})
+find_package (SDL2 REQUIRED)
+message (STATUS
+	"Found SDL2 on system:\n"
+	"inc: ${SDL2_INCLUDE_DIR}\n"
+	"lib: ${SDL2_LIBRARY}"
+)
+include_directories (${SDL2_INCLUDE_DIR})
 
 # c++11 activation
 list (APPEND CMAKE_CXX_FLAGS "-std=c++11")
