@@ -3,10 +3,6 @@
 
 int
 main (int argc, char **argv) {
-	TerraNovaGame game;
-
-	SDL_Application application;
-	application.run (game);
-
-	return 0;
+	// run the game via sdl
+	return SDL_Application ().run_with<TerraNovaGame> ();
 }

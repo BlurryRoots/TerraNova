@@ -10,21 +10,30 @@ class TerraNovaGame
 
 public:
 	TerraNovaGame ();
-	virtual ~TerraNovaGame ();
 
-	void on_initialize ();
+	virtual
+	~TerraNovaGame ();
 
-	void on_shutdown_request ();
+	void
+	on_initialize ();
 
-	void on_update (float dt);
+	void
+	on_shutdown_request ();
 
-	void on_render ();
+	void
+	on_update (float dt);
 
-	void on_shutdown ();
+	void
+	on_render ();
 
-	bool has_closing_request ();
+	void
+	on_shutdown ();
 
-	void log (std::string msg);
+	bool
+	has_closing_request ();
+
+	void
+	log (std::string msg);
 
 private:
 	bool closing_request;

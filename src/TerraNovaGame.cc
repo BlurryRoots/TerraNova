@@ -7,13 +7,18 @@
 
 #include <TerraNovaGame.h>
 
+#include <blurryroots/throwif.h>
+
 TerraNovaGame::TerraNovaGame () {
+
 }
 
 TerraNovaGame::~TerraNovaGame () {
+
 }
 
-void TerraNovaGame::on_initialize () {
+void
+TerraNovaGame::on_initialize () {
 	glEnable (GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -27,27 +32,35 @@ void TerraNovaGame::on_initialize () {
 	log ("Starting...");
 }
 
-void TerraNovaGame::on_shutdown_request () {
+void
+TerraNovaGame::on_shutdown_request () {
 	this->closing_request = true;
 }
 
-void TerraNovaGame::on_update (float dt) {
-
+void
+TerraNovaGame::on_update (float dt) {
+	// THROW_IF (true,
+	// 	"YOU SHALL NOT PASS!"
+	// );
 }
 
-void TerraNovaGame::on_render () {
-	glClearColor (0.0f, 0.0f, 0.0f, 1.0f);
+void
+TerraNovaGame::on_render () {
+	glClearColor (0.5f, 0.7f, 0.2f, 1.0f);
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void TerraNovaGame::on_shutdown () {
+void
+TerraNovaGame::on_shutdown () {
 
 }
 
-bool TerraNovaGame::has_closing_request () {
+bool
+TerraNovaGame::has_closing_request () {
 	return this->closing_request;
 }
 
-void TerraNovaGame::log (std::string msg) {
+void
+TerraNovaGame::log (std::string msg) {
 	std::cout << msg << std::endl;
 }
