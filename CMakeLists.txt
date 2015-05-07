@@ -56,6 +56,9 @@ message (STATUS
 )
 include_directories (${SDL2_INCLUDE_DIR})
 
+# include custom includes
+include_directories (inc)
+
 # c++11 activation
 list (APPEND CMAKE_CXX_FLAGS "-std=c++11")
 # compilation flags
