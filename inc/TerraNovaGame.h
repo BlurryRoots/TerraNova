@@ -1,6 +1,7 @@
 #include <string>
 
 #include <IGame.h>
+#include <yanecos/EntityManager.h>
 
 #ifndef TerraNovaGame_h
 #define TerraNovaGame_h
@@ -13,9 +14,6 @@ public:
 
 	virtual
 	~TerraNovaGame ();
-
-	void
-	on_initialize ();
 
 	void
 	on_shutdown_request ();
@@ -37,6 +35,8 @@ public:
 
 private:
 	bool closing_request;
+
+	Yanecos::EntityManager em;
 
 };
 

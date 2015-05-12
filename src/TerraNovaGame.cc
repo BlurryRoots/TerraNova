@@ -8,17 +8,9 @@
 #include <TerraNovaGame.h>
 
 #include <blurryroots/throwif.h>
+#include <ClearColorData.h>
 
 TerraNovaGame::TerraNovaGame () {
-
-}
-
-TerraNovaGame::~TerraNovaGame () {
-
-}
-
-void
-TerraNovaGame::on_initialize () {
 	glEnable (GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -30,6 +22,17 @@ TerraNovaGame::on_initialize () {
 	glFrontFace (GL_CCW);
 
 	log ("Starting...");
+
+	auto eid = this->em.create_entity ();
+	THROW_IF (0 == eid,
+		"Ne ne!"
+	);
+
+	this->em.add_data<ClearColorData> (eid, 0.3f, 0.3f, 0.5f, 1.0f);
+}
+
+TerraNovaGame::~TerraNovaGame () {
+	//
 }
 
 void
@@ -37,22 +40,35 @@ TerraNovaGame::on_shutdown_request () {
 	this->closing_request = true;
 }
 
+#include <SDL.h>
 void
 TerraNovaGame::on_update (float dt) {
-	// THROW_IF (true,
-	// 	"YOU SHALL NOT PASS!"
-	// );
+	auto s = std::string ("dt: ") + std::to_string (dt);
+	SDL_Log (s.c_str ());
+	static const float color_speed = 1.0f;
+
+	for (auto eid : this->em.get_entities_with<ClearColorData> ()) {
+		auto color = this->em.get_entity_data<ClearColorData> (eid);
+		color->r = color->r > 1.0f
+			? 0.0f
+			: color->r + dt * color_speed
+			;
+	}
 }
 
 void
 TerraNovaGame::on_render () {
-	glClearColor (0.5f, 0.7f, 0.2f, 1.0f);
+	for (auto eid : this->em.get_entities_with<ClearColorData> ()) {
+		auto color = this->em.get_entity_data<ClearColorData> (eid);
+		glClearColor (color->r, color->g, color->b, color->a);
+	}
+
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void
 TerraNovaGame::on_shutdown () {
-
+	//
 }
 
 bool

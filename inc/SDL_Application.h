@@ -58,16 +58,30 @@ public:
 		int status = 0;
 		SDL_Log ("Running game...");
 		try {
-			//game.on_initialize ();
+			// game initialization should be done in constructor
+			// if something fails here, the user has to make sure
+			// his mess gets clean up by the integral parts
+			// see http://stackoverflow.com/a/810850/949561
 			GameType game;
-
+			// sld event container
 			SDL_Event e;
+			// no use for this atm
 			bool keep_running = true;
+			// keeps track of the ticks of last from
+			Uint32 last_ticks = SDL_GetTicks ();
+
+			// application loop
 			while (keep_running
 				&& ! game.has_closing_request ()) {
-				game.on_update (0);
+				// calculate time passed since last frame
+				Uint32 current_ticks = SDL_GetTicks ();
+				Uint32 diff_ticks = current_ticks - last_ticks;
+				float dt = static_cast<float> (diff_ticks) / 1000.0f;
 
-				//e is an SDL_Event variable we've declared before entering the main loop
+				// custom game logic
+				game.on_update (dt);
+
+				// map sdl events and passed them to the game
 				while (SDL_PollEvent (&e)) {
 					switch (e.type) {
 						case SDL_QUIT:
@@ -76,10 +90,16 @@ public:
 					}
 				}
 
+				// custome game render logic
 				game.on_render ();
+				// swap window buffer
 				SDL_GL_SwapWindow (window);
+
+				// update last frame time
+				last_ticks = current_ticks;
 			}
 
+			// gets called when game loop is successfully exited
 			game.on_shutdown ();
 		}
 		catch (std::exception &ex) {

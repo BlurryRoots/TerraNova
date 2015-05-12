@@ -7,9 +7,6 @@ struct IGame {
 	~IGame () {}
 
 	virtual void
-	on_initialize () = 0;
-
-	virtual void
 	on_update (float dt) = 0;
 
 	virtual void
