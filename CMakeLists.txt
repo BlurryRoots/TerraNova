@@ -36,12 +36,11 @@ set (SYSTEM_LIBS)
 list (APPEND SYSTEM_LIBS z)
 list (APPEND SYSTEM_LIBS pthread)
 
+# include custom includes
+include_directories (inc)
+
 # library / modules
 add_subdirectory (lib)
-
-# sdl2
-#include_directories (lib/sdl2/include build/sdl2/include)
-#set (SDL2_LIBRARY SDL2-static)
 
 # glew
 include_directories (lib/glew/include lib/glew/src)
@@ -56,8 +55,11 @@ message (STATUS
 )
 include_directories (${SDL2_INCLUDE_DIR})
 
-# include custom includes
-include_directories (inc)
+# yanecos
+include_directories (lib/yanecos/inc)
+
+# json
+include_directories (lib/json/src)
 
 # c++11 activation
 list (APPEND CMAKE_CXX_FLAGS "-std=c++11")
