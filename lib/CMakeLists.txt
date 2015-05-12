@@ -13,4 +13,5 @@ add_definitions (-DGLEW_STATIC)
 option (glew-cmake_BUILD_SHARED "" OFF)
 add_subdirectory (glew)
 
-
+# yanecos
+add_subdirectory (yanecos)

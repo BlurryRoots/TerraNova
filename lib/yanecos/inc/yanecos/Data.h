@@ -20,7 +20,9 @@ public:
 	};
 
 	virtual
-	~Data (void) {}
+	~Data (void) {
+		//
+	}
 
 	const std::string&
 	get_type (void) const override {

@@ -17,6 +17,10 @@
 
 #include <json.hpp>
 
+#include <blurryroots/throwif.h>
+
+//#define DEBUG_SERIALIZE
+
 namespace Yanecos {
 
 typedef
@@ -100,10 +104,6 @@ public:
 
 	virtual
 	~EntityManager () {
-	}
-
-	void
-	dispose () {
 #ifdef DEBUG_SERIALIZE
 		std::cout << this->serialize () << std::endl << std::endl;
 #endif
@@ -248,7 +248,10 @@ public:
 		);
 
 		const auto &type_name = typeid (TDataType).name ();
-		assert (1 == this->data_owner.count (type_name));
+		//assert (1 == this->data_owner.count (type_name));
+		THROW_IF (1 != this->data_owner.count (type_name),
+			"missing data_owner for typename: ", type_name
+		);
 
 		return this->data_owner.at (type_name);
 	}
