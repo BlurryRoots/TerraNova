@@ -3,7 +3,7 @@
 
 #include <GL/glew.h>
 
-#include <IGame.h>
+#include <terranova/IGame.h>
 
 #include <TerraNovaGame.h>
 

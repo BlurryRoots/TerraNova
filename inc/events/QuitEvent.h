@@ -3,7 +3,7 @@
 
 struct QuitEvent {
 
-	Uint32 timestamp;
+	uint32_t timestamp;
 
 };
 

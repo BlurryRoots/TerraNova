@@ -8,9 +8,10 @@
 #include <SDL.h>
 #include <SDL_opengles.h>
 
-#include <IGame.h>
 #include <SDL_EventManager.h>
-#include <TerraNovaEventAdapter.h>
+
+#include <terranova/IGame.h>
+#include <terranova/TerraNovaEventAdapter.h>
 
 template<class GameType>
 class SDL_Application {

@@ -3,13 +3,14 @@
 
 #include <string>
 
-#include <IGame.h>
-#include <yanecos/EntityManager.h>
-#include <ClearScreenProcessor.h>
+#include <terranova/IGame.h>
 #include <terranova/IEventHandler.h>
 
+#include <yanecos/EntityManager.h>
+#include <ClearScreenProcessor.h>
+
 class TerraNovaGame
-: public IGame
+: public terranova::IGame
 , public terranova::IEventHandler {
 
 public:

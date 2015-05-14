@@ -1,6 +1,8 @@
 #ifndef IGame_h
 #define IGame_h
 
+namespace terranova {
+
 struct IGame {
 
 	virtual
@@ -19,5 +21,7 @@ struct IGame {
 	on_shutdown () = 0;
 
 };
+
+}
 
 #endif

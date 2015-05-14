@@ -1,7 +1,7 @@
 #ifndef TerraNoveEventAdapter_h
 #define TerraNoveEventAdapter_h
 
-#include <IGame.h>
+#include <terranova/IGame.h>
 #include <SDL_IEventHandler.h>
 
 #include <terranova/IEventHandler.h>
