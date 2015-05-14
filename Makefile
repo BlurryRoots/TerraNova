@@ -11,3 +11,4 @@ setup-win64:
 
 clean:
 	@rm -rf build/*
+	@rm -rf bin/*
