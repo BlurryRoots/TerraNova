@@ -1,21 +1,18 @@
-#ifndef UTIL_H
-#define UTIL_H
+#ifndef throwif_h
+#define throwif_h
 
 #include <vector>
 #include <sstream>
 #include <stdexcept>
 #include <string>
 
-
-// allows for super class referencing without
-// having to care about the type name
-#define DECLARE_SUPER_CLASS(super_class) \
-	private: typedef super_class __super;
-
 // for convenient and verbose output of throw_if
 // exeption messages
 #define SOURCE_LOCATION \
 	__FILE__, "@", std::to_string (__LINE__), ": "
+
+// convient use of throw if function including source location
+// from where exception has been thrown
 #define THROW_IF(premise, ...) \
 	blurryroots::util::throw_if (premise, SOURCE_LOCATION, ##__VA_ARGS__)
 
