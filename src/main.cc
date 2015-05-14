@@ -4,5 +4,5 @@
 int
 main (int argc, char **argv) {
 	// run the game via sdl
-	return SDL_Application ().run_with<TerraNovaGame> ();
+	return SDL_Application<TerraNovaGame> ().run ();
 }
