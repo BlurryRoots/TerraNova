@@ -148,7 +148,7 @@ public:
 			+ std::to_string (event.timestamp / 1000.0f);
 		SDL_Log (s.c_str ());
 
-		QuitEvent e {event.timestamp};
+		terranova::QuitEvent e {event.timestamp};
 		this->handler->on (e);
 	}
 

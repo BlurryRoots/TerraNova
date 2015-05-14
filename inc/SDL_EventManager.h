@@ -4,7 +4,7 @@
 #include <SDL.h>
 
 #include <SDL_IEventHandler.h>
-#include <events/QuitEvent.h>
+#include <terranova/events/QuitEvent.h>
 
 class SDL_EventManager {
 

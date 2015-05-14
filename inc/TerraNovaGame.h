@@ -20,7 +20,7 @@ public:
 	~TerraNovaGame ();
 
 	void
-	on (QuitEvent e);
+	on (terranova::QuitEvent e);
 
 	void
 	on_update (float dt);

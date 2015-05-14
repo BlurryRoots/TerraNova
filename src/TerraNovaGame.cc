@@ -39,7 +39,7 @@ TerraNovaGame::~TerraNovaGame () {
 }
 
 void
-TerraNovaGame::on (QuitEvent event) {
+TerraNovaGame::on (terranova::QuitEvent event) {
 	this->closing_request = true;
 }
 

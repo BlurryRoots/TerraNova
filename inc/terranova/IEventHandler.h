@@ -1,7 +1,7 @@
 #ifndef TerraNove_IEventHandler_h
 #define TerraNove_IEventHandler_h
 
-#include <events/QuitEvent.h>
+#include <terranova/events/QuitEvent.h>
 
 namespace terranova {
 
