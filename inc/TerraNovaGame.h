@@ -1,10 +1,11 @@
+#ifndef TerraNovaGame_h
+#define TerraNovaGame_h
+
 #include <string>
 
 #include <IGame.h>
 #include <yanecos/EntityManager.h>
-
-#ifndef TerraNovaGame_h
-#define TerraNovaGame_h
+#include <ClearScreenProcessor.h>
 
 class TerraNovaGame
 : public IGame {
@@ -37,6 +38,7 @@ private:
 	bool closing_request;
 
 	Yanecos::EntityManager em;
+	ClearScreenProcessor csp;
 
 };
 
