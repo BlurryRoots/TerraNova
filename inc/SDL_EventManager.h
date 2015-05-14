@@ -3,7 +3,7 @@
 
 #include <SDL.h>
 
-#include <SDL_EventHandler.h>
+#include <SDL_IEventHandler.h>
 #include <events/QuitEvent.h>
 
 class SDL_EventManager {

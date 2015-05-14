@@ -12,9 +12,6 @@ struct IGame {
 	virtual void
 	on_render () = 0;
 
-	virtual void
-	on_shutdown_request () = 0;
-
 	virtual bool
 	has_closing_request () = 0;
 

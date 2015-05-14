@@ -6,9 +6,11 @@
 #include <IGame.h>
 #include <yanecos/EntityManager.h>
 #include <ClearScreenProcessor.h>
+#include <terranova/IEventHandler.h>
 
 class TerraNovaGame
-: public IGame {
+: public IGame
+, public terranova::IEventHandler {
 
 public:
 	TerraNovaGame ();
@@ -17,7 +19,7 @@ public:
 	~TerraNovaGame ();
 
 	void
-	on_shutdown_request ();
+	on (QuitEvent e);
 
 	void
 	on_update (float dt);

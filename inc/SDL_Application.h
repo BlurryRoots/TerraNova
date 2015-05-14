@@ -9,15 +9,13 @@
 #include <SDL_opengles.h>
 
 #include <IGame.h>
-#include <SDL_EventHandler.h>
 #include <SDL_EventManager.h>
+#include <TerraNovaEventAdapter.h>
 
 template<class GameType>
-class SDL_Application
-: SDL_EventHandler {
+class SDL_Application {
 public:
-	SDL_Application (void)
-	: event_manager (this) {
+	SDL_Application (void) {
 		SDL_Log ("Launching application...");
 
 		this->sdl_status = SDL_Init (SDL_INIT_EVERYTHING);
@@ -73,6 +71,13 @@ public:
 			// keeps track of the ticks of last from
 			Uint32 last_ticks = SDL_GetTicks ();
 
+			// event adapter receives sdl events and translates them
+			// into terra nova game events
+			auto event_adapter = TerraNoveEventAdapter (&game);
+			// event manager processes sdl events and handes them
+			// on to the handler
+			auto event_manager = SDL_EventManager (&event_adapter);
+
 			// application loop
 			while (keep_running
 				&& ! game.has_closing_request ()) {
@@ -88,7 +93,7 @@ public:
 				SDL_Event event;
 				// map sdl events and passed them to the game
 				while (SDL_PollEvent (&event)) {
-					this->event_manager.process (event);
+					event_manager.process (event);
 				}
 
 				// custome game render logic
@@ -125,142 +130,7 @@ public:
 		SDL_Quit ();
 	}
 
-	void
-	on (const SDL_ControllerAxisEvent &event) {
-		auto s = std::string ("Controller axis event!");
-		SDL_Log (s.c_str ());
-	}
 
-	void
-	on (const SDL_ControllerButtonEvent &event) {
-		auto s = std::string ("SDL_ControllerButtonEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_ControllerDeviceEvent &event) {
-		auto s = std::string ("SDL_ControllerDeviceEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_DollarGestureEvent &event) {
-		auto s = std::string ("SDL_DollarGestureEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_DropEvent &event) {
-		auto s = std::string ("SDL_DropEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_TouchFingerEvent &event) {
-		auto s = std::string ("SDL_TouchFingerEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_KeyboardEvent &event) {
-		auto s = std::string ("SDL_KeyboardEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_JoyAxisEvent &event) {
-		auto s = std::string ("SDL_JoyAxisEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_JoyBallEvent &event) {
-		auto s = std::string ("SDL_JoyBallEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_JoyHatEvent &event) {
-		auto s = std::string ("SDL_JoyHatEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_JoyButtonEvent &event) {
-		auto s = std::string ("SDL_JoyButtonEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_JoyDeviceEvent &event) {
-		auto s = std::string ("SDL_JoyDeviceEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_MouseMotionEvent &event) {
-		auto s = std::string ("SDL_MouseMotionEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_MouseButtonEvent &event) {
-		auto s = std::string ("SDL_MouseButtonEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_MouseWheelEvent &event) {
-		auto s = std::string ("SDL_MouseWheelEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_MultiGestureEvent &event) {
-		auto s = std::string ("SDL_MultiGestureEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	//
-	void
-	on (const SDL_SysWMEvent &event) {
-		auto s = std::string ("SDL_SysWMEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_TextEditingEvent &event) {
-		auto s = std::string ("SDL_TextEditingEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_TextInputEvent &event) {
-		auto s = std::string ("SDL_TextInputEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_UserEvent &event) {
-		auto s = std::string ("SDL_UserEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_WindowEvent &event) {
-		auto s = std::string ("SDL_WindowEvent");
-		SDL_Log (s.c_str ());
-	}
-
-	void
-	on (const SDL_QuitEvent &event) {
-		auto s = std::string ("Quitting event! at: ")
-			+ std::to_string (event.timestamp / 1000.0f);
-		SDL_Log (s.c_str ());
-
-		QuitEvent e {event.timestamp};
-		this->game_ref->on_shutdown_request ();
-	}
 
 private:
 	SDL_Window *window;
@@ -269,10 +139,6 @@ private:
 
 	int sdl_status;
 	int glew_status;
-
-	SDL_EventManager event_manager;
-
-	GameType *game_ref;
 };
 
 #endif
