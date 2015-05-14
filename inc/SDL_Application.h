@@ -9,11 +9,15 @@
 #include <SDL_opengles.h>
 
 #include <IGame.h>
+#include <SDL_EventHandler.h>
+#include <SDL_EventManager.h>
 
 template<class GameType>
-class SDL_Application {
+class SDL_Application
+: SDL_EventHandler {
 public:
-	SDL_Application (void) {
+	SDL_Application (void)
+	: event_manager (this) {
 		SDL_Log ("Launching application...");
 
 		this->sdl_status = SDL_Init (SDL_INIT_EVERYTHING);
@@ -80,7 +84,12 @@ public:
 				// custom game logic
 				game.on_update (dt);
 
-				this->process_sdl_events (game);
+				// sld event container
+				SDL_Event event;
+				// map sdl events and passed them to the game
+				while (SDL_PollEvent (&event)) {
+					this->event_manager.process (event);
+				}
 
 				// custome game render logic
 				game.on_render ();
@@ -116,234 +125,144 @@ public:
 		SDL_Quit ();
 	}
 
-private:
 	void
-	process_sdl_events (GameType &game) {
-		// sld event container
-		SDL_Event e;
-
-		// map sdl events and passed them to the game
-		while (SDL_PollEvent (&e)) {
-			switch (e.type) {
-				case SDL_CONTROLLERAXISMOTION:
-					this->on (e.caxis, game);
-					break;
-				case SDL_CONTROLLERBUTTONDOWN:
-				case SDL_CONTROLLERBUTTONUP:
-					this->on (e.cbutton, game);
-					break;
-				case SDL_CONTROLLERDEVICEADDED:
-				case SDL_CONTROLLERDEVICEREMOVED:
-				case SDL_CONTROLLERDEVICEREMAPPED:
-					this->on (e.cdevice, game);
-					break;
-				case SDL_DOLLARGESTURE:
-				case SDL_DOLLARRECORD:
-					this->on (e.dgesture, game);
-					break;
-				case SDL_DROPFILE:
-					this->on (e.drop, game);
-					break;
-				case SDL_FINGERMOTION:
-				case SDL_FINGERDOWN:
-				case SDL_FINGERUP:
-					this->on (e.tfinger, game);
-					break;
-				case SDL_KEYDOWN:
-				case SDL_KEYUP:
-					this->on (e.key, game);
-					break;
-				case SDL_JOYAXISMOTION:
-					this->on (e.jaxis, game);
-					break;
-				case SDL_JOYBALLMOTION:
-					this->on (e.jball, game);
-					break;
-				case SDL_JOYHATMOTION:
-					this->on (e.jhat, game);
-					break;
-				case SDL_JOYBUTTONDOWN:
-				case SDL_JOYBUTTONUP:
-					this->on (e.jbutton, game);
-					break;
-				case SDL_JOYDEVICEADDED:
-				case SDL_JOYDEVICEREMOVED:
-					this->on (e.jdevice, game);
-					break;
-				case SDL_MOUSEMOTION:
-					this->on (e.motion, game);
-					break;
-				case SDL_MOUSEBUTTONDOWN:
-				case SDL_MOUSEBUTTONUP:
-					this->on (e.button, game);
-					break;
-				case SDL_MOUSEWHEEL:
-					this->on (e.wheel, game);
-					break;
-				case SDL_MULTIGESTURE:
-					this->on (e.mgesture, game);
-					break;
-				case SDL_QUIT:
-					this->on (e.quit, game);
-					break;
-				case SDL_SYSWMEVENT:
-					this->on (e.syswm, game);
-					break;
-				case SDL_TEXTEDITING:
-					this->on (e.edit, game);
-					break;
-				case SDL_TEXTINPUT:
-					this->on (e.text, game);
-					break;
-				case SDL_USEREVENT:
-					this->on (e.user, game);
-					break;
-				case SDL_WINDOWEVENT:
-					this->on (e.window, game);
-					break;
-				default:
-					SDL_Log ("Panic! Unkown event!");
-					break;
-			}
-		}
-	}
-
-	void
-	on (const SDL_ControllerAxisEvent &event, GameType &game) {
+	on (const SDL_ControllerAxisEvent &event) {
 		auto s = std::string ("Controller axis event!");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_ControllerButtonEvent &event, GameType &game) {
+	on (const SDL_ControllerButtonEvent &event) {
 		auto s = std::string ("SDL_ControllerButtonEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_ControllerDeviceEvent &event, GameType &game) {
+	on (const SDL_ControllerDeviceEvent &event) {
 		auto s = std::string ("SDL_ControllerDeviceEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_DollarGestureEvent &event, GameType &game) {
+	on (const SDL_DollarGestureEvent &event) {
 		auto s = std::string ("SDL_DollarGestureEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_DropEvent &event, GameType &game) {
+	on (const SDL_DropEvent &event) {
 		auto s = std::string ("SDL_DropEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_TouchFingerEvent &event, GameType &game) {
+	on (const SDL_TouchFingerEvent &event) {
 		auto s = std::string ("SDL_TouchFingerEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_KeyboardEvent &event, GameType &game) {
+	on (const SDL_KeyboardEvent &event) {
 		auto s = std::string ("SDL_KeyboardEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_JoyAxisEvent &event, GameType &game) {
+	on (const SDL_JoyAxisEvent &event) {
 		auto s = std::string ("SDL_JoyAxisEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_JoyBallEvent &event, GameType &game) {
+	on (const SDL_JoyBallEvent &event) {
 		auto s = std::string ("SDL_JoyBallEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_JoyHatEvent &event, GameType &game) {
+	on (const SDL_JoyHatEvent &event) {
 		auto s = std::string ("SDL_JoyHatEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_JoyButtonEvent &event, GameType &game) {
+	on (const SDL_JoyButtonEvent &event) {
 		auto s = std::string ("SDL_JoyButtonEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_JoyDeviceEvent &event, GameType &game) {
+	on (const SDL_JoyDeviceEvent &event) {
 		auto s = std::string ("SDL_JoyDeviceEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_MouseMotionEvent &event, GameType &game) {
+	on (const SDL_MouseMotionEvent &event) {
 		auto s = std::string ("SDL_MouseMotionEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_MouseButtonEvent &event, GameType &game) {
+	on (const SDL_MouseButtonEvent &event) {
 		auto s = std::string ("SDL_MouseButtonEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_MouseWheelEvent &event, GameType &game) {
+	on (const SDL_MouseWheelEvent &event) {
 		auto s = std::string ("SDL_MouseWheelEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_MultiGestureEvent &event, GameType &game) {
+	on (const SDL_MultiGestureEvent &event) {
 		auto s = std::string ("SDL_MultiGestureEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	//
 	void
-	on (const SDL_SysWMEvent &event, GameType &game) {
+	on (const SDL_SysWMEvent &event) {
 		auto s = std::string ("SDL_SysWMEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_TextEditingEvent &event, GameType &game) {
+	on (const SDL_TextEditingEvent &event) {
 		auto s = std::string ("SDL_TextEditingEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_TextInputEvent &event, GameType &game) {
+	on (const SDL_TextInputEvent &event) {
 		auto s = std::string ("SDL_TextInputEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_UserEvent &event, GameType &game) {
+	on (const SDL_UserEvent &event) {
 		auto s = std::string ("SDL_UserEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_WindowEvent &event, GameType &game) {
+	on (const SDL_WindowEvent &event) {
 		auto s = std::string ("SDL_WindowEvent");
 		SDL_Log (s.c_str ());
 	}
 
 	void
-	on (const SDL_QuitEvent &event, GameType &game) {
+	on (const SDL_QuitEvent &event) {
 		auto s = std::string ("Quitting event! at: ")
 			+ std::to_string (event.timestamp / 1000.0f);
 		SDL_Log (s.c_str ());
 
-		game.on_shutdown_request ();
+		QuitEvent e {event.timestamp};
+		this->game_ref->on_shutdown_request ();
 	}
 
+private:
 	SDL_Window *window;
 	SDL_GLContext context;
 	SDL_DisplayMode mode;
@@ -351,6 +270,9 @@ private:
 	int sdl_status;
 	int glew_status;
 
+	SDL_EventManager event_manager;
+
+	GameType *game_ref;
 };
 
 #endif
