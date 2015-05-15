@@ -24,11 +24,11 @@
 namespace Yanecos {
 
 typedef
-	unsigned long long int
+	unsigned long int
 	EntityID
 	;
 typedef
-	unsigned long long int
+	unsigned long int
 	DataID
 	;
 
@@ -92,7 +92,7 @@ private:
 	}
 
 public:
-	EntityManager ()
+	EntityManager (void)
 	: data ()
 	, data_owner ()
 	, type_lookup ()
@@ -103,7 +103,7 @@ public:
 	};
 
 	virtual
-	~EntityManager () {
+	~EntityManager (void) {
 #ifdef DEBUG_SERIALIZE
 		std::cout << this->serialize () << std::endl << std::endl;
 #endif
@@ -121,7 +121,7 @@ public:
 	}
 
 	std::string
-	serialize () {
+	serialize (void) const {
 		using json = nlohmann::json;
 
 		json j;
@@ -131,8 +131,12 @@ public:
 
 		json entity_data_json = json::array();
 		for (auto &entry : this->entity_data) {
+			auto key = std::to_string (entry.first);
+			auto value = json (entry.second);
+
 			json jentry = json::object ();
-			jentry[std::to_string (entry.first)] = json (entry.second);
+			jentry[key] = value;
+
 			entity_data_json.push_back (jentry);
 		}
 		j["entity_data"] = entity_data_json;
@@ -230,7 +234,7 @@ public:
 	}
 
 	EntityCollection
-	get_all_entities () {
+	get_all_entities () const {
 		EntityCollection collection;
 
 		for (auto &entry : this->entity_data) {
@@ -241,14 +245,13 @@ public:
 	}
 
 	template<class TDataType> EntityCollection
-	get_entities_with () {
+	get_entities_with () const {
 		static_assert (
 			all_derived_from_data<TDataType>::value,
 			"Given type has to be derived from Data<>!"
 		);
 
 		const auto &type_name = typeid (TDataType).name ();
-		//assert (1 == this->data_owner.count (type_name));
 		THROW_IF (1 != this->data_owner.count (type_name),
 			"missing data_owner for typename: ", type_name
 		);
@@ -256,13 +259,13 @@ public:
 		return this->data_owner.at (type_name);
 	}
 
-	template<class TArg>
-	std::string get_type_name (TArg arg) {
+	template<class TArg> std::string
+	get_type_name (TArg arg) const {
 		return typeid (TArg).name ();
 	}
 
 	template<class... TDataType> EntityCollection
-	get_entities_with_all () {
+	get_entities_with_all (void) const {
 		static_assert (
 			all_derived_from_data<TDataType...>::value,
 			"All types must be derived from Data<>"
