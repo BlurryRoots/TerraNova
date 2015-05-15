@@ -4,6 +4,9 @@
 #include <GL/glew.h>
 
 #include <terranova/IGame.h>
+#include <terranova/events/MouseButtonEvent.h>
+#include <terranova/events/QuitEvent.h>
+#include <terranova/events/UserEvent.h>
 
 #include <TerraNovaGame.h>
 
@@ -39,10 +42,23 @@ TerraNovaGame::~TerraNovaGame () {
 }
 
 void
+TerraNovaGame::on (terranova::MouseButtonEvent event) {
+	this->log ("MouseButtonEvent at ("
+		+ std::to_string (event.x) + ":"
+		+ std::to_string (event.y) + ")");
+}
+
+void
 TerraNovaGame::on (terranova::QuitEvent event) {
+	this->log ("QuitEvent at " + std::to_string (event.timestamp));
 	this->closing_request = true;
 }
 
+void
+TerraNovaGame::on (terranova::UserEvent event) {
+	this->log ("UserEvent at " + std::to_string (event.timestamp));
+	this->log ("Should I delete the pointer here?");
+}
 
 void
 TerraNovaGame::on_update (float dt) {
@@ -57,6 +73,7 @@ TerraNovaGame::on_render () {
 void
 TerraNovaGame::on_shutdown () {
 	this->log ("Shutting down...");
+	this->log (this->em.serialize ());
 }
 
 bool

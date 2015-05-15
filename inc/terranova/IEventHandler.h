@@ -2,6 +2,8 @@
 #define TerraNove_IEventHandler_h
 
 #include <terranova/events/QuitEvent.h>
+#include <terranova/events/UserEvent.h>
+#include <terranova/events/MouseButtonEvent.h>
 
 namespace terranova {
 
@@ -14,6 +16,12 @@ struct IEventHandler {
 
 	virtual void
 	on (QuitEvent e) = 0;
+
+	virtual void
+	on (UserEvent e) = 0;
+
+	virtual void
+	on (MouseButtonEvent e) = 0;
 
 };
 

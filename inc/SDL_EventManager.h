@@ -1,10 +1,16 @@
 #ifndef SDL_EventManager_h
 #define SDL_EventManager_h
 
+#include <typeinfo>
+#include <typeindex>
+#include <unordered_map>
+
 #include <SDL.h>
 
 #include <SDL_IEventHandler.h>
-#include <terranova/events/QuitEvent.h>
+#include <terranova/events/UserEvent.h>
+
+#include <blurryroots/throwif.h>
 
 class SDL_EventManager {
 
@@ -17,6 +23,35 @@ public:
 	virtual
 	~SDL_EventManager (void) {
 		//
+	}
+
+	// TODO: this should not be in the sdl side of things!!
+	template<class TEventType> void
+	push (TEventType *event) {
+		auto type_name = typeid (TEventType).name ();
+		auto event_id_it = this->user_event_ids.find (type_name);
+
+		if (this->user_event_ids.end () == event_id_it) {
+			Uint32 new_event_type_id = SDL_RegisterEvents (1);
+			THROW_IF (((Uint32)-1) == new_event_type_id,
+				"Error creating user event type id!"
+			);
+
+			this->user_event_ids.emplace (type_name, new_event_type_id);
+		}
+
+		// create heap ticks
+		Uint32 *ticks = new Uint32;
+		*ticks = SDL_GetTicks ();
+		// create sdl event structure
+		SDL_Event sdl_event;
+		// initialize the event with zero values
+		SDL_zero (sdl_event);
+		sdl_event.type = this->user_event_ids.at (type_name);
+		sdl_event.user.code = 1337;
+		sdl_event.user.data1 = static_cast<void*> (ticks);
+		sdl_event.user.data2 = static_cast<void*> (event);
+		SDL_PushEvent (&sdl_event);
 	}
 
 	void
@@ -106,6 +141,7 @@ public:
 
 private:
 	SDL_EventHandler *handler;
+	std::unordered_map<std::string, Uint32> user_event_ids;
 
 };
 

@@ -76,8 +76,11 @@ public:
 			// into terra nova game events
 			auto event_adapter = TerraNoveEventAdapter (&game);
 			// event manager processes sdl events and handes them
-			// on to the handler
+			// to handler/adapter
 			auto event_manager = SDL_EventManager (&event_adapter);
+			// TODO: ????
+			// do I need a event manager adapter?
+			// how do I pass terranova events to application?
 
 			// application loop
 			while (keep_running

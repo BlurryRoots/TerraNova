@@ -23,6 +23,12 @@ public:
 	on (terranova::QuitEvent e);
 
 	void
+	on (terranova::UserEvent e);
+
+	void
+	on (terranova::MouseButtonEvent e);
+
+	void
 	on_update (float dt);
 
 	void

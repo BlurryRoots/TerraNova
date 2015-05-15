@@ -5,6 +5,9 @@
 #include <SDL_IEventHandler.h>
 
 #include <terranova/IEventHandler.h>
+#include <terranova/events/MouseButtonEvent.h>
+#include <terranova/events/QuitEvent.h>
+#include <terranova/events/UserEvent.h>
 
 class TerraNoveEventAdapter
 : public SDL_EventHandler {
@@ -97,6 +100,13 @@ public:
 	on (const SDL_MouseButtonEvent &event) {
 		auto s = std::string ("SDL_MouseButtonEvent");
 		SDL_Log (s.c_str ());
+
+		auto e = terranova::MouseButtonEvent ();
+		e.down = SDL_PRESSED == event.state;
+		e.x = event.x;
+		e.y = event.y;
+
+		this->handler->on (e);
 	}
 
 	void
@@ -134,6 +144,19 @@ public:
 	on (const SDL_UserEvent &event) {
 		auto s = std::string ("SDL_UserEvent");
 		SDL_Log (s.c_str ());
+
+		// TODO: should this really be used by anything?
+		uint32_t ticks =
+			*static_cast<uint32_t*> (event.data1);
+		void* data = event.data2;
+
+		this->handler->on (
+			terranova::UserEvent {
+				event.type,
+				ticks,
+				data
+			}
+		);
 	}
 
 	void
@@ -144,12 +167,9 @@ public:
 
 	void
 	on (const SDL_QuitEvent &event) {
-		auto s = std::string ("Quitting event! at: ")
-			+ std::to_string (event.timestamp / 1000.0f);
-		SDL_Log (s.c_str ());
-
-		terranova::QuitEvent e {event.timestamp};
-		this->handler->on (e);
+		this->handler->on (
+			terranova::QuitEvent {event.timestamp}
+		);
 	}
 
 private:
