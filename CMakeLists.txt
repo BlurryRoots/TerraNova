@@ -36,8 +36,11 @@ set (SYSTEM_LIBS)
 list (APPEND SYSTEM_LIBS z)
 list (APPEND SYSTEM_LIBS pthread)
 
-# include custom includes
-include_directories (inc)
+# glm
+include_directories (lib/glm)
+
+# stb image loader
+include_directories (lib/stb)
 
 # glew
 add_definitions (-DGLEW_STATIC)
@@ -84,6 +87,9 @@ include_directories (${YANECOS_INCLUDE_DIR})
 # json
 include_directories (lib/json/src)
 
+# include custom includes
+include_directories (inc)
+
 # c++11 activation
 list (APPEND CMAKE_CXX_FLAGS "-std=c++11")
 # compilation flags
@@ -93,7 +99,7 @@ add_definitions (-Wall)
 add_executable (${app_name} ${source_files})
 target_link_libraries (
 	${app_name}
-	${SDL2_LIBRARY} ${GLEW_LIBRARY} ${SYSTEM_LIBS}
+	${SDL2_LIBRARY} ${TINYOBJ_LIBRARY} ${GLEW_LIBRARY} ${SYSTEM_LIBS}
 )
 
 
