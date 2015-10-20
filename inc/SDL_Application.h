@@ -62,22 +62,23 @@ public:
 		int status = 0;
 		SDL_Log ("Running game...");
 		try {
-			// game initialization should be done in constructor
-			// if something fails here, the user has to make sure
-			// his mess gets clean up by the integral parts
-			// see http://stackoverflow.com/a/810850/949561
-			GameType game;
 			// no use for this atm
 			bool keep_running = true;
 			// keeps track of the ticks of last from
 			Uint32 last_ticks = SDL_GetTicks ();
 
+			// game initialization should be done in constructor
+			// if something fails here, the user has to make sure
+			// his mess gets clean up by the integral parts
+			// see http://stackoverflow.com/a/810850/949561
+			GameType game;
 			// event adapter receives sdl events and translates them
 			// into terra nova game events
 			auto event_adapter = TerraNoveEventAdapter (&game);
 			// event manager processes sdl events and handes them
 			// to handler/adapter
-			auto event_manager = SDL_EventManager (&event_adapter);
+			auto event_manager = SDL_EventManager ();
+			event_manager.add_handler (&event_adapter);
 			// TODO: ????
 			// do I need a event manager adapter?
 			// how do I pass terranova events to application?

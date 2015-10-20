@@ -2,7 +2,7 @@
 GRIND = /usr/bin/valgrind
 GRIND_OPTS = --show-leak-kinds=all --leak-check=full --track-origins=yes -v
 
-all: build
+default: setup
 
 build: setup
 	@make -C build

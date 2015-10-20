@@ -1,9 +1,10 @@
 #ifndef SDL_EventHandler_h
 #define SDL_EventHandler_h
 
-struct SDL_EventHandler {
+struct SDL_IEventHandler {
+
 	virtual
-	~SDL_EventHandler (void) {
+	~SDL_IEventHandler (void) {
 		//
 	}
 
@@ -72,6 +73,7 @@ struct SDL_EventHandler {
 
 	virtual void
 	on (const SDL_QuitEvent &event) = 0;
+
 };
 
 #endif

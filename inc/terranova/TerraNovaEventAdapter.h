@@ -10,7 +10,7 @@
 #include <terranova/events/UserEvent.h>
 
 class TerraNoveEventAdapter
-: public SDL_EventHandler {
+: public SDL_IEventHandler {
 
 public:
 	TerraNoveEventAdapter (terranova::IEventHandler *handler)
